@@ -84,7 +84,7 @@ echo "Daily Revenue: $" . $marketStats['total_revenue'];
 */5 * * * * /usr/bin/php /path/to/server_stats.php
 
 # Daily cleanup (optional)
-0 2 * * * /usr/bin/php -r "require 'config.php'; require 'ServerStats.php'; (new ServerStats())->cleanupOldData();"
+0 2 * * * /usr/bin/php -r "require 'config.php'; require 'server_stats.php'; (new ServerStats())->cleanupOldData();"
 ```
 
 ### Web Integration
@@ -117,17 +117,6 @@ Returns current server status with intelligent caching
     'server_name' => 'Venom Roleplay',
     'map' => 'rp_downtown_v4c_v2',
     'timestamp' => 1719264000
-]
-```
-
-#### `getMarketStats()`
-Returns 24-hour market analytics
-```php
-[
-    'total_orders' => 125,
-    'total_revenue' => 2450.75,
-    'unique_buyers' => 67,
-    'active_products' => 89
 ]
 ```
 
