@@ -156,36 +156,6 @@ class ServerStats {
             return $defaultStats;
         }
     }
-
-    public function getMarketStats() {
-        try {
-            $stmt = $this->db->prepare("
-                SELECT 
-                    (SELECT COUNT(*) FROM orders WHERE created_at >= DATE_SUB(NOW(), INTERVAL 24 HOUR)) as total_orders,
-                    (SELECT COALESCE(SUM(price), 0) FROM orders WHERE created_at >= DATE_SUB(NOW(), INTERVAL 24 HOUR)) as total_revenue,
-                    (SELECT COUNT(DISTINCT user_id) FROM orders WHERE created_at >= DATE_SUB(NOW(), INTERVAL 24 HOUR)) as unique_buyers,
-                    (SELECT COUNT(*) FROM products WHERE active = 1) as active_products
-            ");
-            $stmt->execute();
-            $result = $stmt->fetch();
-            
-            return [
-                'total_orders' => (int)($result['total_orders'] ?? 0),
-                'total_revenue' => (float)($result['total_revenue'] ?? 0),
-                'unique_buyers' => (int)($result['unique_buyers'] ?? 0),
-                'active_products' => (int)($result['active_products'] ?? 0)
-            ];
-        } catch (PDOException $e) {
-            error_log("Market stats error: " . $e->getMessage());
-            return [
-                'total_orders' => 0,
-                'total_revenue' => 0,
-                'unique_buyers' => 0,
-                'active_products' => 0
-            ];
-        }
-    }
-
     public function saveStats($stats) {
         if (!$stats || !is_array($stats)) {
             return false;
